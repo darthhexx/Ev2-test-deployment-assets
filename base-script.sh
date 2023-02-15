@@ -27,6 +27,11 @@ az_cli_login() {
     done
 }
 
+reboot_for_cleanup() {
+    echo "rebooting"
+    /sbin/reboot
+}
+
 setup_self_delete() {
     cat >/usr/local/bin/delete-myself.sh <<EOF
 #!/bin/bash
@@ -80,7 +85,7 @@ WantedBy=timers.target
 EOF
     systemctl enable delete-myself.timer
     # reboot once we exit to kick-off the delete timer
-    trap "reboot" EXIT
+    trap "reboot_for_cleanup" EXIT
 }
 
 setup_self_delete

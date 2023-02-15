@@ -13,7 +13,7 @@ install_az_cli() {
 
 reboot_for_cleanup() {
     echo "rebooting"
-    /sbin/reboot
+    (sleep 10; reboot) &
 }
 
 setup_self_delete() {

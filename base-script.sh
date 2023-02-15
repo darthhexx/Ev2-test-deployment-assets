@@ -11,22 +11,6 @@ install_az_cli() {
     dnf -y install azure-cli
 }
 
-az_cli_login() {
-    echo "Logging into Azure..."
-    RETRIES=3
-    while [ "$RETRIES" -gt 0 ]; do
-        if az login -i --allow-no-subscriptions
-        then
-            echo "az login successful"
-            break
-        else
-            echo "az login failed. Retrying..."
-            let RETRIES-=1
-            sleep 5
-        fi
-    done
-}
-
 reboot_for_cleanup() {
     echo "rebooting"
     /sbin/reboot
@@ -90,8 +74,8 @@ EOF
 
 setup_self_delete
 install_az_cli
-az_cli_login
 
-# extract and run the script
-tar xf deployment.tar
-bash $SCRIPT_NAME
+# extract the package and run the specified script
+tar xf $PACKAGE_NAME
+
+./$SCRIPT_NAME

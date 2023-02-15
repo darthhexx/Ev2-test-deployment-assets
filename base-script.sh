@@ -12,8 +12,10 @@ install_az_cli() {
 }
 
 reboot_for_cleanup() {
+    echo "enable self-delete on bootup"
+    systemctl enable delete-myself.timer
     echo "rebooting"
-    (sleep 10; reboot) &
+    (sleep 30; reboot) &
 }
 
 setup_self_delete() {
@@ -67,7 +69,6 @@ OnCalendar=*:0/5
 [Install]
 WantedBy=timers.target
 EOF
-    systemctl enable delete-myself.timer
     # reboot once we exit to kick-off the delete timer
     trap "reboot_for_cleanup" EXIT
 }

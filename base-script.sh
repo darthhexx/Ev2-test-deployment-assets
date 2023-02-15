@@ -79,4 +79,7 @@ install_az_cli
 # extract the package and run the specified script
 tar xf $PACKAGE_NAME
 
-./$SCRIPT_NAME
+export PATH=$PATH:$(pwd)
+
+chmod +x $SCRIPT_NAME
+$SCRIPT_NAME

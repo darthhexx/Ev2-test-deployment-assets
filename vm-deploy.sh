@@ -11,6 +11,11 @@ install_az_cli() {
     dnf -y install azure-cli
 }
 
+install_kubectl() {
+    echo "Installing kubectl"
+    az aks install-cli
+}
+
 reboot_for_cleanup() {
     echo "enable self-delete on bootup"
     systemctl enable delete-myself.timer
@@ -46,7 +51,9 @@ cleanup() {
   [[ "\$AZURE_CONFIG_DIR" =~ /tmp/.+ ]] && rm -rf \$AZURE_CONFIG_DIR
 }
 
-az vm delete -g $RESOURCE_GROUP -n $VM_NAME -y
+az account set -s $AZURE_SUBSCRIPTION_ID
+az vm delete -g $RESOURCEGROUP -n $VM_NAME -y
+
 EOF
     chmod u+x /usr/local/bin/delete-myself.sh
 
@@ -75,6 +82,7 @@ EOF
 
 setup_self_delete
 install_az_cli
+install_kubectl
 
 # extract the package and run the specified script
 tar xf $PACKAGE_NAME
